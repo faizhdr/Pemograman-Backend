@@ -18,11 +18,17 @@ class PenerbitController extends Controller
     public function index(Request $request)
     {
         Paginator::useBootstrap();
-        $keyword = $request->keyword;
+        $keyword = $request->get('keyword');
 
-
-        $ar_penerbit = Penerbit::where('nama', 'LIKE', '%'.$keyword.'%')->paginate(5);
-        return view('penerbit.index', compact('ar_penerbit'));
+        $ar_penerbit = DB::table('penerbit')
+        ->where('nama', 'like', '%'.$keyword.'%')
+        ->orWhere('alamat', 'like', '%'.$keyword.'%')
+        ->orWhere('email', 'like', '%'.$keyword.'%')
+        ->orWhere('website', 'like', '%'.$keyword.'%')
+        ->orWhere('telepon', 'like', '%'.$keyword.'%')
+        ->orWhere('cp', 'like', '%'.$keyword.'%')
+        ->paginate(5);
+        return view('penerbit.index', compact('ar_penerbit', 'keyword'));
     }
 
     /**

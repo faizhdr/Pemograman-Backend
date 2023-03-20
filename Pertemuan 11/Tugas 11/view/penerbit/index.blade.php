@@ -12,9 +12,9 @@
     <a class="btn btn-secondary btn-md" href="{{ route('home') }}" role="button">Back</a>
     <a href="{{ url('bukupdf') }}" class="btn btn-info"><i class="fas fa-file-pdf"></i> </a>
     <a href="{{ url('bukucsv') }}" class="btn btn-warning"><i class="fas fa-file-csv"></i> </a>
-    <form action="penerbit/cari" method="GET" class="mt-3">
+    <form action="{{ route('penerbit.index') }}">
         <div class="input-group">
-            <input name="keyword" type="text" name="cari" class="form-control" />
+            <input name="keyword" type="text" value="{{ Request::get('keyword') }}" class="form-control" />
             <div class="input-group-append">
                 <input type="submit" value="Filter" class="btn btn-primary">
             </div>
