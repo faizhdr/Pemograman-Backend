@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use PDF;
 use App\Models\Penerbit;
 use Illuminate\Http\Request;
+use App\Exports\PenerbitExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
 
@@ -64,15 +66,17 @@ class PenerbitController extends Controller
         return redirect('/penerbit');
     }
 
-    public function bukuPDF()
+    public function penerbitPDF()
     {
-        $ar_buku = DB::table('buku')
-            ->join('pengarang', 'pengarang.id', '=', 'buku.idpengarang')
-            ->join('penerbit', 'penerbit.id', '=', 'buku.idpenerbit')
-            ->join('kategori', 'kategori.id', '=', 'buku.idkategori')
-            ->select('buku.*', 'pengarang.nama', 'penerbit.nama AS pen', 'kategori.nama AS kat')->get();
-        $pdf = PDF::loadView('buku.daftarBuku', ['ar_buku' => $ar_buku]);
-        return $pdf->download('dataBuku.pdf');
+        $ar_penerbit = DB::table('penerbit')
+            ->select('penerbit.*')->get();
+        $pdf = PDF::loadView('penerbit.daftarPenerbit', ['ar_penerbit' => $ar_penerbit]);
+        return $pdf->download('dataPenerbit.pdf');
+    }
+
+    public function penerbitcsv()
+    {
+        return Excel::download(new PenerbitExport, 'penerbit.csv');
     }
 
     /**
